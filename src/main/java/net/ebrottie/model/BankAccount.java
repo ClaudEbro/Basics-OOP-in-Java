@@ -2,7 +2,7 @@ package net.ebrottie.model;
 
 import java.util.UUID;
 
-public class BankAccount {
+public abstract class BankAccount {
     private String accountId;
     private double balance;
     private String currency;
@@ -63,4 +63,6 @@ public class BankAccount {
                 ", status=" + status +
                 '}';
     }
+
+    public  abstract String getType();
 }

@@ -1,12 +1,13 @@
 package net.ebrottie;
 
 import net.ebrottie.model.BankAccount;
+import net.ebrottie.model.CurrentAccount;
 
 public class App {
 
     public static void main(String[] args) {
         BankAccount account1 = null;
-        account1 = new BankAccount();
+        account1 = new CurrentAccount();
         //account1.setAccountId("722-15"); //due to generating automatically the account ID
         account1.setCurrency("XOF");
         account1.setBalance(7900000);
@@ -14,7 +15,7 @@ public class App {
         printAccount(account1);
 
         //Create a new account with the constructor's overload
-        BankAccount account2 = new BankAccount("XOF", 3000);
+        BankAccount account2 = new CurrentAccount("XOF", 3000, 2000);
         printAccount(account2);
 
     }
