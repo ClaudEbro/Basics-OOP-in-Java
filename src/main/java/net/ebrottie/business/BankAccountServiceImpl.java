@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BankAccountServiceImpl implements BankAccountService{
@@ -86,16 +88,55 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     @Override
     public List<BankAccount> getSavingAccounts() {
-        return null;
+
+        // Declarative Approach
+        List<BankAccount> collect = bankAccountList.stream().filter(acc -> acc instanceof SavingAccount).collect(Collectors.toList());
+        return collect;
+
+        //Imperative Approach
+        /*List<BankAccount> result = new ArrayList<>();
+        for (BankAccount acc:bankAccountList) {
+            if( acc instanceof SavingAccount){ //or if(acc.getType().equals("SAVING_ACCOUNT")
+                result.add(acc);
+            }
+        }
+        return result;*/
+
     }
 
     @Override
     public List<BankAccount> CurrentAccounts() {
-        return null;
+        List<BankAccount> collect = bankAccountList
+                .stream()
+                .filter(acc -> acc.getType().equals("CURRENT_ACCOUNT")).collect(Collectors.toList());
+        return collect;
     }
 
     @Override
     public double getTotalBalance() {
-        return 0;
+
+        //Declarative Approach
+        return bankAccountList
+                .stream()
+                .map(account -> account.getBalance())
+                .reduce(0.0,(a,v)-> a+v);
+
+        //Imperative Approach
+        /*double sum = 0;
+        for (BankAccount acc:bankAccountList){
+                sum = sum + acc.getBalance();
+        }
+        return sum;*/
+    }
+
+    @Override
+    public List<BankAccount> searchAccounts(Predicate<BankAccount> filter) {
+        List <BankAccount> result = new ArrayList<>();
+        for (BankAccount acc:bankAccountList) {
+            if (filter.test(acc)){
+                result.add(acc);
+            }
+        }
+        return result;
     }
 }

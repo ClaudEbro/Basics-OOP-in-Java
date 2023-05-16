@@ -5,6 +5,7 @@ import net.ebrottie.exceptions.BalanceNotSufficientException;
 import net.ebrottie.model.BankAccount;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public interface BankAccountService {
 
@@ -18,5 +19,5 @@ public interface BankAccountService {
     List<BankAccount> getSavingAccounts();
     List<BankAccount> CurrentAccounts();
     double getTotalBalance();
-    //List<BankAccount> searchAccounts();
+    List<BankAccount> searchAccounts(Predicate<BankAccount> filter); //Search BankAccounts by filter
 }

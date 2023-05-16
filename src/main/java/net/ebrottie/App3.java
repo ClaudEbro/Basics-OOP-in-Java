@@ -2,11 +2,15 @@ package net.ebrottie;
 
 import net.ebrottie.business.BankAccountService;
 import net.ebrottie.business.BankAccountServiceImpl;
+import net.ebrottie.business.Condition;
 import net.ebrottie.exceptions.AccountNotFoundException;
 import net.ebrottie.exceptions.BalanceNotSufficientException;
 import net.ebrottie.model.BankAccount;
 import net.ebrottie.model.CurrentAccount;
+import net.ebrottie.model.SavingAccount;
 import net.ebrottie.utils.DataTranformationUtils;
+
+import java.util.List;
 
 //To populate BankAccount and test other implemented methods
 public class App3 {
@@ -26,10 +30,10 @@ public class App3 {
                 .forEach(System.out::println);*/
 
         //Adding a BankAccount
-        BankAccount bankAccount1 = new CurrentAccount("XOF",32000,000);
+        BankAccount bankAccount1 = new CurrentAccount("XOF",32000,1000);
         bankAccount1.setAccountId("CC1");
 
-        BankAccount bankAccount2 = new CurrentAccount("XOF",100,3.2);
+        BankAccount bankAccount2 = new SavingAccount("XOF",100,3.2);
         bankAccount2.setAccountId("CC2");
 
         bankAccountService.addBankAccount(bankAccount1);
@@ -61,11 +65,13 @@ public class App3 {
         try {
             BankAccount acc1 = bankAccountService.getAccountById("CC1");
             BankAccount acc2 = bankAccountService.getAccountById("CC2");
+
             System.out.println("========= Before Operation ===========");
             System.out.println(DataTranformationUtils.toJson(acc1));
             System.out.println(DataTranformationUtils.toJson(acc2));
 
             bankAccountService.debit(acc1.getAccountId(),2000);
+
             System.out.println("========= After Operation ===========");
             System.out.println(DataTranformationUtils.toJson(acc1));
 
@@ -79,5 +85,18 @@ public class App3 {
             System.out.println(e.getMessage());
         }
 
+        System.out.println("========= All SavingAccounts ===========");
+        bankAccountService.getSavingAccounts()
+                .stream()
+                .map(DataTranformationUtils::toJson)
+                .forEach(System.out::println);
+
+        System.out.println("========= Total Balance ===========");
+        System.out.println("TOTAL BALANCE = "+bankAccountService.getTotalBalance());
+
+
+        System.out.println("========= Search BankAccounts by conditions ===========");
+        List<BankAccount> bankAccountList = bankAccountService.searchAccounts(bankAccount -> (bankAccount.getBalance() > 10000));
+        bankAccountList.stream().map(DataTranformationUtils::toJson).forEach(System.out::println);
     }
 }
